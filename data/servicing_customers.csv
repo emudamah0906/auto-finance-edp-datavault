@@ -1,0 +1,146 @@
+customer_id,first_name,last_name,email,phone,mailing_street,mailing_city,mailing_province,mailing_postal_code,source_extract_date
+C000001,James,Kim,cust1@example.com,(324) 780-9770,6790 Elm Ave,Edmonton,AB,M9S 3V8,2026-05-15
+C000002,Arjun,Miller,arjun.miller@mail.com,(787) 416-9610,9667 Elm Ave,Burnaby,BC,X2B 1J0,2026-05-15
+C000003,James,Martin,james.martin@mail.com,(705) 556-4088,2814 Elm Ave,Laval,QC,K3S 1K1,2026-05-15
+C000004,Mohammed,Brown,cust4@example.com,(869) 883-9570,8633 Pine Ave,Laval,QC,B0M 9B3,2026-05-15
+C000005,Linda,Jones,cust5@example.com,(376) 847-1818,9853 Pine Ave,Quebec City,QC,M5X 5X3,2026-05-15
+C000006,Sofia,Chen,cust6@example.com,(532) 323-9943,3841 Elm Ave,Toronto,ON,V4J 9G2,2026-05-15
+C000007,Jennifer,Nguyen,cust7@example.com,(649) 449-1666,5604 Elm Ave,Ottawa,ON,L1H 5Y1,2026-05-15
+C000008,Diego,Martin,cust8@example.com,(626) 910-8798,4163 Cedar Ave,Edmonton,AB,H1H 3R0,2026-05-15
+C000010,Linda,Roy,cust10@example.com,(483) 254-4173,6475 Oak Ave,London,ON,L5L 1J8,2026-05-15
+C000014,John,Johnson,john.johnson@mail.com,(296) 521-7383,3566 Elm Ave,London,ON,K0V 9R8,2026-05-15
+C000018,Liam,Jones,cust18@example.com,(389) 579-8607,756 Cedar Ave,Edmonton,AB,P9Y 7G4,2026-05-15
+C000019,Mei,Williams,mei.williams@mail.com,(967) 825-3880,1764 Cedar Ave,Edmonton,AB,J5C 6R8,2026-05-15
+C000020,Emma,Williams,emma.williams@mail.com,(411) 420-8708,3148 Cedar Ave,Ottawa,ON,A7G 1V3,2026-05-15
+C000021,Robert,Nguyen,robert.nguyen@mail.com,(211) 923-3953,5008 Oak Ave,Calgary,AB,H4E 9X3,2026-05-15
+C000023,Emma,Jones,cust23@example.com,(555) 630-8272,4025 Oak Ave,Toronto,ON,S5M 0E8,2026-05-15
+C000024,Arjun,Chen,cust24@example.com,(807) 881-9686,5080 Pine Ave,Mississauga,ON,H4Y 4G0,2026-05-15
+C000026,Wei,Martin,cust26@example.com,(651) 466-7056,4009 Pine Ave,Markham,ON,M7S 5C1,2026-05-15
+C000027,Elizabeth,Brown,cust27@example.com,(614) 711-3381,6977 Elm Ave,Edmonton,AB,S4A 9M1,2026-05-15
+C000028,John,Martin,cust28@example.com,(546) 905-2840,3153 Elm Ave,Toronto,ON,T0N 4G4,2026-05-15
+C000031,Elizabeth,Roy,cust31@example.com,(420) 945-8278,915 Oak Ave,Ottawa,ON,C1A 3N6,2026-05-15
+C000035,Mei,Gagnon,cust35@example.com,(582) 724-1287,2970 Oak Ave,Markham,ON,H3V 6R6,2026-05-15
+C000036,Sofia,Nguyen,cust36@example.com,(496) 498-9677,6938 Oak Ave,Vancouver,BC,P3K 8R1,2026-05-15
+C000037,Diego,Nguyen,diego.nguyen@mail.com,(266) 840-9876,3144 Elm Ave,Surrey,BC,K4G 4G4,2026-05-15
+C000038,John,Lee,cust38@example.com,(392) 772-9612,2912 Oak Ave,Mississauga,ON,S3J 4X8,2026-05-15
+C000040,John,Williams,john.williams@mail.com,(443) 463-4419,7744 Pine Ave,Vancouver,BC,X6S 9L0,2026-05-15
+C000041,David,Johnson,cust41@example.com,(508) 883-1168,5931 Pine Ave,Vancouver,BC,M3Y 2R9,2026-05-15
+C000042,David,Martin,cust42@example.com,(560) 364-9202,5629 Elm Ave,Ottawa,ON,L3N 0P2,2026-05-15
+C000043,James,Brown,cust43@example.com,(716) 924-8777,8570 Pine Ave,Surrey,BC,L7A 3S9,2026-05-15
+C000044,Sofia,Brown,sofia.brown@mail.com,(414) 530-2574,7706 Cedar Ave,Laval,QC,B4T 1Y8,2026-05-15
+C000046,Mei,Brown,mei.brown@mail.com,(980) 806-6574,4489 Oak Ave,London,ON,X7J 4M9,2026-05-15
+C000047,Ava,Kim,cust47@example.com,(438) 634-9177,6182 Cedar Ave,Edmonton,AB,T9Y 9L7,2026-05-15
+C000048,Liam,Brown,cust48@example.com,(456) 701-9147,1745 Cedar Ave,Markham,ON,S9B 1L9,2026-05-15
+C000050,Emma,Wong,cust50@example.com,(982) 232-8051,1324 Elm Ave,Montreal,QC,X4T 1N6,2026-05-15
+C000051,Elizabeth,Garcia,cust51@example.com,(641) 337-6119,6863 Cedar Ave,Quebec City,QC,N0N 1Y8,2026-05-15
+C000052,Mary,Kim,cust52@example.com,(706) 805-7189,1572 Cedar Ave,Laval,QC,M4H 3M3,2026-05-15
+C000053,Wei,Kim,cust53@example.com,(638) 553-6855,7127 Pine Ave,Markham,ON,L5A 5S6,2026-05-15
+C000054,Jennifer,Smith,cust54@example.com,(238) 671-7921,3758 Cedar Ave,Edmonton,AB,M0G 4H8,2026-05-15
+C000055,Wei,Martin,wei.martin@mail.com,(919) 749-3749,5426 Cedar Ave,Montreal,QC,M0G 5B3,2026-05-15
+C000056,Emma,Miller,emma.miller@mail.com,(922) 702-8009,2826 Cedar Ave,Burnaby,BC,X1S 3X4,2026-05-15
+C000058,Emma,Garcia,emma.garcia@mail.com,(966) 616-1848,6314 Oak Ave,Burnaby,BC,X5K 0C0,2026-05-15
+C000059,Priya,Roy,cust59@example.com,(446) 354-5919,2316 Cedar Ave,London,ON,R9N 1J0,2026-05-15
+C000061,John,Smith,cust61@example.com,(484) 874-3883,8253 Pine Ave,Toronto,ON,V7P 8R7,2026-05-15
+C000064,Olivia,Wong,cust64@example.com,(916) 315-6185,6346 Pine Ave,Ottawa,ON,G0J 6J4,2026-05-15
+C000066,David,Patel,cust66@example.com,(974) 441-5872,3462 Pine Ave,Ottawa,ON,X9R 3K1,2026-05-15
+C000067,Wei,Tremblay,wei.tremblay@mail.com,(354) 400-4642,6075 Cedar Ave,Surrey,BC,S1V 0T3,2026-05-15
+C000069,Olivia,Jones,cust69@example.com,(377) 903-6367,4940 Pine Ave,Mississauga,ON,T7S 2S2,2026-05-15
+C000070,Emma,Khan,emma.khan@mail.com,(601) 655-9817,5131 Elm Ave,Quebec City,QC,Y9V 7L7,2026-05-15
+C000071,Lucas,Brown,cust71@example.com,(935) 738-8129,4700 Oak Ave,Mississauga,ON,X5G 9P3,2026-05-15
+C000073,Lucas,Roy,cust73@example.com,(210) 680-3182,4158 Elm Ave,Montreal,QC,V6T 6Y7,2026-05-15
+C000075,David,Garcia,david.garcia@mail.com,(353) 223-8864,6902 Cedar Ave,Mississauga,ON,C4T 5J4,2026-05-15
+C000076,Fatima,Nguyen,fatima.nguyen@mail.com,(972) 682-4402,3408 Elm Ave,London,ON,B0B 9L0,2026-05-15
+C000077,Mary,Davis,cust77@example.com,(236) 681-5263,5851 Oak Ave,Montreal,QC,M4N 3X5,2026-05-15
+C000078,Patricia,Jones,cust78@example.com,(557) 295-4337,5988 Oak Ave,Edmonton,AB,H3G 6S0,2026-05-15
+C000082,John,Brown,cust82@example.com,(702) 642-6080,221 Elm Ave,Edmonton,AB,T0C 1B3,2026-05-15
+C000083,Lucas,Khan,cust83@example.com,(292) 974-7922,5926 Cedar Ave,Markham,ON,C9X 9R5,2026-05-15
+C000085,Sofia,Patel,sofia.patel@mail.com,(304) 899-6214,8232 Oak Ave,Ottawa,ON,L6S 1M4,2026-05-15
+C000087,Ava,Singh,cust87@example.com,(391) 416-4032,1524 Cedar Ave,Quebec City,QC,V0L 7S6,2026-05-15
+C000088,Arjun,Gagnon,cust88@example.com,(908) 614-8974,6282 Oak Ave,Calgary,AB,P2P 6N9,2026-05-15
+C000090,Jennifer,Jones,cust90@example.com,(696) 682-1321,8631 Elm Ave,Burnaby,BC,H3K 0H9,2026-05-15
+C000091,Sofia,Tremblay,sofia.tremblay@mail.com,(632) 492-1284,5170 Pine Ave,Edmonton,AB,K9Y 6H2,2026-05-15
+C000092,Wei,Wong,wei.wong@mail.com,(563) 268-4543,1446 Cedar Ave,Ottawa,ON,B4V 4T3,2026-05-15
+C000095,Priya,Singh,cust95@example.com,(893) 362-3862,1480 Pine Ave,Ottawa,ON,X5H 4T4,2026-05-15
+C000096,David,Chen,cust96@example.com,(987) 247-5382,44 Oak Ave,Mississauga,ON,L4E 0H3,2026-05-15
+C000097,Noah,Brown,cust97@example.com,(845) 320-4365,3698 Pine Ave,Vancouver,BC,Y6S 4V7,2026-05-15
+C000098,Michael,Roy,michael.roy@mail.com,(292) 408-7004,1251 Oak Ave,Markham,ON,G5X 5J4,2026-05-15
+C000100,James,Lee,cust100@example.com,(286) 546-6157,8758 Elm Ave,Laval,QC,J9X 8P2,2026-05-15
+C000101,Mei,Wong,mei.wong@mail.com,(763) 816-6371,5632 Elm Ave,Edmonton,AB,C2Y 6N5,2026-05-15
+C000102,Arjun,Roy,cust102@example.com,(864) 614-4232,1813 Cedar Ave,Burnaby,BC,P9H 3Y3,2026-05-15
+C000103,Noah,Wong,cust103@example.com,(733) 548-3621,5097 Elm Ave,London,ON,B0J 8C4,2026-05-15
+C000104,Arjun,Lee,arjun.lee@mail.com,(330) 920-3835,5108 Oak Ave,Montreal,QC,P9T 3B9,2026-05-15
+C000105,Elizabeth,Martin,cust105@example.com,(931) 586-9514,2841 Elm Ave,Edmonton,AB,G7J 4C1,2026-05-15
+C000107,Olivia,Tremblay,cust107@example.com,(905) 701-7830,1444 Oak Ave,Toronto,ON,C5P 5J0,2026-05-15
+C000108,Liam,Gagnon,liam.gagnon@mail.com,(239) 394-1964,5035 Pine Ave,Markham,ON,T7Y 1E0,2026-05-15
+C000113,Patricia,Wong,cust113@example.com,(219) 481-4371,6673 Pine Ave,Surrey,BC,Y4N 5T6,2026-05-15
+C000114,Jennifer,Tremblay,cust114@example.com,(740) 524-7258,7081 Oak Ave,Edmonton,AB,N4E 8H9,2026-05-15
+C000116,Patricia,Johnson,patricia.johnson@mail.com,(616) 828-5372,5591 Oak Ave,Vancouver,BC,S4C 9E0,2026-05-15
+C000117,Olivia,Smith,cust117@example.com,(848) 439-1305,6266 Cedar Ave,Quebec City,QC,C0B 8G2,2026-05-15
+C000119,James,Johnson,james.johnson@mail.com,(957) 326-7627,8775 Oak Ave,Edmonton,AB,X2G 1V5,2026-05-15
+C000121,Wei,Miller,cust121@example.com,(813) 536-1260,6243 Cedar Ave,Calgary,AB,A8J 4V9,2026-05-15
+C000122,Robert,Williams,robert.williams@mail.com,(203) 211-6656,9318 Oak Ave,Calgary,AB,P7G 2Y7,2026-05-15
+C000124,Diego,Khan,cust124@example.com,(207) 400-7489,2588 Oak Ave,Markham,ON,B7L 8N9,2026-05-15
+C000125,John,Singh,cust125@example.com,(735) 946-5494,4163 Oak Ave,Quebec City,QC,T1G 9P1,2026-05-15
+C000126,David,Brown,david.brown@mail.com,(934) 245-6426,8385 Elm Ave,Toronto,ON,X6A 6B4,2026-05-15
+C000134,Michael,Miller,michael.miller@mail.com,(386) 468-1209,6857 Pine Ave,Burnaby,BC,V4T 6N0,2026-05-15
+C000137,Linda,Singh,cust137@example.com,(547) 767-5029,4214 Elm Ave,Edmonton,AB,S6L 3B1,2026-05-15
+C000139,Priya,Chen,priya.chen@mail.com,(562) 641-3204,3614 Cedar Ave,Quebec City,QC,X8T 6P6,2026-05-15
+C000141,Noah,Gagnon,cust141@example.com,(685) 474-7569,3894 Elm Ave,Calgary,AB,R0S 2G9,2026-05-15
+C000144,Elizabeth,Lee,cust144@example.com,(483) 433-2612,1601 Oak Ave,London,ON,R0L 7L7,2026-05-15
+C000145,Mei,Singh,cust145@example.com,(922) 818-3258,253 Oak Ave,London,ON,A3N 1L8,2026-05-15
+C000146,Noah,Jones,cust146@example.com,(433) 432-4438,5287 Oak Ave,Surrey,BC,H9M 4C9,2026-05-15
+C000147,Liam,Wong,cust147@example.com,(583) 342-3102,4254 Cedar Ave,Calgary,AB,P3M 7G8,2026-05-15
+C000148,Lucas,Smith,cust148@example.com,(342) 357-6410,1524 Cedar Ave,Ottawa,ON,J0N 3G6,2026-05-15
+C000149,Patricia,Chen,patricia.chen@mail.com,(769) 461-9364,8472 Cedar Ave,Quebec City,QC,X6N 6G9,2026-05-15
+C000152,Michael,Lee,cust152@example.com,(482) 406-1121,8763 Oak Ave,Toronto,ON,X2Y 0E8,2026-05-15
+C000155,Robert,Brown,robert.brown@mail.com,(582) 414-1683,7157 Pine Ave,Ottawa,ON,Y4S 7S7,2026-05-15
+C000157,John,Gagnon,john.gagnon@mail.com,(608) 485-6307,9039 Oak Ave,Burnaby,BC,L4N 9V5,2026-05-15
+C000158,John,Roy,john.roy@mail.com,(565) 851-4287,1330 Cedar Ave,Mississauga,ON,P5H 8V4,2026-05-15
+C000161,Wei,Garcia,cust161@example.com,(611) 869-6181,4530 Elm Ave,Surrey,BC,C4X 6H6,2026-05-15
+C000162,Elizabeth,Khan,elizabeth.khan@mail.com,(323) 966-2930,8078 Cedar Ave,Laval,QC,N3L 9S5,2026-05-15
+C000163,Wei,Gagnon,wei.gagnon@mail.com,(566) 997-8140,5091 Elm Ave,London,ON,R7X 9S3,2026-05-15
+C000168,Lucas,Roy,lucas.roy@mail.com,(251) 779-4384,5751 Oak Ave,Calgary,AB,E6J 0C5,2026-05-15
+C000171,Fatima,Nguyen,cust171@example.com,(701) 515-2167,2544 Oak Ave,Burnaby,BC,G2X 4Y3,2026-05-15
+C000174,Noah,Wong,cust174@example.com,(800) 515-7743,9834 Oak Ave,Ottawa,ON,R6Y 0X4,2026-05-15
+C000178,Lucas,Johnson,cust178@example.com,(416) 734-1118,808 Elm Ave,Quebec City,QC,X0L 0J3,2026-05-15
+C000182,Elizabeth,Wong,cust182@example.com,(372) 656-2895,1180 Pine Ave,Toronto,ON,T3P 8R6,2026-05-15
+C000183,Mohammed,Singh,cust183@example.com,(936) 463-8803,5668 Pine Ave,Edmonton,AB,L6A 5K9,2026-05-15
+C000185,Wei,Kim,cust185@example.com,(518) 263-9775,671 Cedar Ave,Ottawa,ON,L6G 7G0,2026-05-15
+C000186,Liam,Chen,liam.chen@mail.com,(411) 604-5897,9395 Elm Ave,Calgary,AB,G8P 6T2,2026-05-15
+C000187,David,Martin,cust187@example.com,(846) 420-9110,698 Oak Ave,Vancouver,BC,P5J 8K0,2026-05-15
+C000188,Elizabeth,Garcia,cust188@example.com,(761) 601-6528,5574 Pine Ave,Calgary,AB,C2R 2S4,2026-05-15
+C000190,Fatima,Miller,cust190@example.com,(570) 943-2670,6075 Cedar Ave,Ottawa,ON,X4M 6A7,2026-05-15
+C000191,Arjun,Chen,cust191@example.com,(352) 842-7619,367 Cedar Ave,Burnaby,BC,C9E 9X1,2026-05-15
+C000193,Mohammed,Gagnon,cust193@example.com,(505) 785-3051,6068 Elm Ave,Montreal,QC,L4E 4H5,2026-05-15
+C000196,Noah,Patel,cust196@example.com,(343) 790-9035,7037 Pine Ave,London,ON,Y2X 3X5,2026-05-15
+C000197,Elizabeth,Miller,cust197@example.com,(816) 765-4539,4459 Cedar Ave,Edmonton,AB,S5R 5B7,2026-05-15
+C000198,Jennifer,Kim,cust198@example.com,(285) 460-7968,4965 Pine Ave,Toronto,ON,M3S 8V7,2026-05-15
+C000199,Wei,Tremblay,wei.tremblay@mail.com,(620) 777-3862,2308 Elm Ave,London,ON,L9B 7R3,2026-05-15
+C000200,David,Jones,cust200@example.com,(480) 210-2604,5666 Oak Ave,Mississauga,ON,T7E 0B1,2026-05-15
+C000201,Priya,Martin,cust201@example.com,(764) 477-2623,4134 Cedar Ave,Ottawa,ON,K4L 3C4,2026-05-15
+C000204,Lucas,Johnson,cust204@example.com,(961) 492-9074,2188 Oak Ave,Edmonton,AB,P7X 5R4,2026-05-15
+C000205,Michael,Smith,michael.smith@mail.com,(476) 863-8992,5063 Elm Ave,Ottawa,ON,Y5P 7J9,2026-05-15
+C000206,John,Lee,john.lee@mail.com,(443) 348-9788,6009 Pine Ave,Edmonton,AB,Y0P 7M7,2026-05-15
+C000207,David,Miller,cust207@example.com,(955) 846-7449,1602 Cedar Ave,Ottawa,ON,B2X 4E3,2026-05-15
+C000209,Patricia,Gagnon,patricia.gagnon@mail.com,(418) 959-5947,7276 Elm Ave,Laval,QC,A7E 4R9,2026-05-15
+C000210,Mei,Roy,cust210@example.com,(343) 562-8110,1574 Pine Ave,Quebec City,QC,V9V 3M1,2026-05-15
+C000213,Olivia,Williams,olivia.williams@mail.com,(527) 785-6571,684 Oak Ave,Burnaby,BC,M5R 0E7,2026-05-15
+C000215,Robert,Johnson,robert.johnson@mail.com,(597) 303-1316,1276 Cedar Ave,Mississauga,ON,A0E 7B6,2026-05-15
+C000219,Michael,Roy,cust219@example.com,(276) 759-6618,4419 Elm Ave,Laval,QC,Y6H 8N5,2026-05-15
+C000220,Emma,Nguyen,emma.nguyen@mail.com,(920) 359-2799,5983 Oak Ave,Edmonton,AB,T6K 5J6,2026-05-15
+C000221,Elizabeth,Johnson,cust221@example.com,(910) 394-7512,6030 Pine Ave,Quebec City,QC,X9S 0V0,2026-05-15
+C000222,David,Miller,david.miller@mail.com,(746) 751-4512,4426 Elm Ave,Montreal,QC,K5E 3A1,2026-05-15
+C000223,Emma,Brown,emma.brown@mail.com,(818) 679-6077,2703 Cedar Ave,Mississauga,ON,K6R 3N7,2026-05-15
+C000225,James,Wong,cust225@example.com,(939) 963-7258,9303 Cedar Ave,Edmonton,AB,C4X 0J0,2026-05-15
+C000228,Patricia,Lee,patricia.lee@mail.com,(667) 889-4740,5968 Cedar Ave,Edmonton,AB,Y2R 0X2,2026-05-15
+C000229,John,Khan,john.khan@mail.com,(885) 625-4887,7715 Pine Ave,Markham,ON,G8X 6S9,2026-05-15
+C000230,Mary,Wong,mary.wong@mail.com,(329) 888-3104,3214 Oak Ave,Markham,ON,L2N 2R1,2026-05-15
+C000232,Wei,Brown,cust232@example.com,(286) 244-3475,8955 Oak Ave,Mississauga,ON,M6N 7L4,2026-05-15
+C000233,David,Gagnon,cust233@example.com,(471) 928-2251,3519 Oak Ave,Laval,QC,N4M 1E8,2026-05-15
+C000236,Michael,Smith,cust236@example.com,(771) 685-3188,8722 Pine Ave,Markham,ON,J6T 3X0,2026-05-15
+C000237,Linda,Johnson,linda.johnson@mail.com,(259) 411-9845,1643 Oak Ave,Edmonton,AB,S8M 1Y4,2026-05-15
+C000239,Liam,Smith,cust239@example.com,(313) 359-1983,4263 Cedar Ave,Quebec City,QC,G2A 1L8,2026-05-15
+C000240,Lucas,Lee,lucas.lee@mail.com,(531) 473-1977,1597 Elm Ave,Toronto,ON,T2Y 3R0,2026-05-15
+C000242,Priya,Khan,priya.khan@mail.com,(693) 996-7469,4770 Cedar Ave,Ottawa,ON,B9A 6V6,2026-05-15
+C000249,Noah,Khan,cust249@example.com,(582) 285-7769,3887 Cedar Ave,Ottawa,ON,G9P 0V6,2026-05-15
+C000250,Mohammed,Garcia,cust250@example.com,(274) 428-7360,1077 Cedar Ave,Calgary,AB,E7G 0M8,2026-05-15
