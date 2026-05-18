@@ -1,48 +1,70 @@
-# TFS EDP — Auto-Finance Data Vault 2.0 on Snowflake
+# Auto-Finance EDP — Data Vault 2.0 on Snowflake
 
-A reference Enterprise Data Platform slice for an auto-finance lender: synthetic
-source data flows through a layered warehouse and lands in star-schema marts that
-BI can query.
+A reference **Enterprise Data Platform** for an auto-finance lender, built on
+Snowflake. Synthetic source data from three operational systems flows through a
+layered warehouse — Data Vault 2.0 for integration, Star Schema for consumption.
 
 ## Architecture
 
 ```
-data/ (S3 Data Lake)  ->  ODS staging  ->  Raw Vault  ->  Business Vault  ->  Star Schema Marts
-   raw source files       source-aligned    Hubs/Links/    PIT + Bridge        dims + facts
-                          1:1 with source   Satellites     computed sats       <- BI queries here
+data/ (Data Lake)  ->  Staging / ODS  ->  Raw Vault  ->  Business Vault  ->  Star Schema Marts
+  raw CSV files        source-aligned     Hubs/Links/    PIT tables          dims + fact
+                       1:1 with source    Satellites                         <- BI queries here
 ```
 
-- **Raw Vault** loads source data exactly as received — no business rules. Insert-only,
-  fully auditable (`LOAD_DTS` + `RECORD_SOURCE` on every row).
-- **Business Vault** holds derived satellites and PIT/Bridge tables that pre-join Hubs
-  to their satellites so the marts don't pay the join cost on every query.
-- **Star Schema Marts** are the consumption layer. Data Vault feeds the star schema;
-  it does not replace it.
+- **Staging (ODS)** — each source file mirrored 1:1 into Snowflake, no business logic.
+- **Raw Vault** — source data loaded exactly as received. Insert-only and fully
+  auditable: every row carries `LOAD_DTS` + `RECORD_SOURCE`. Hash keys (`MD5`) let
+  Hubs, Links and Satellites load in parallel and make every loader idempotent.
+- **Business Vault** — `PIT` (Point-In-Time) tables that pre-resolve "current satellite
+  version" so the marts skip that work. Pure performance, fully rebuildable.
+- **Star Schema Marts** — denormalized dimensions + fact table for BI. Data Vault
+  *feeds* the star schema; it does not replace it.
 
 ## Domain
 
-Auto-finance lender (modeled on Toyota Financial Services): customers apply for
-financing, dealers originate deals, vehicles are collateral, contracts are the booked
-loan/lease accounts, payments flow against contracts over the term.
+An auto-finance lender: customers apply for financing, dealers originate deals,
+vehicles are the collateral, contracts are the booked loan/lease accounts, and
+payments flow against contracts over the term. Three simulated source systems —
+**origination**, **servicing**, and **dealer** — are integrated in the vault.
 
 ## Data model
 
 | Type | Tables |
 |---|---|
-| Hubs | `HUB_CUSTOMER`, `HUB_DEALER`, `HUB_VEHICLE`, `HUB_APPLICATION`, `HUB_CONTRACT` |
-| Links | `LINK_APPLICATION_CUSTOMER`, `LINK_APPLICATION_DEALER`, `LINK_CONTRACT_CUSTOMER`, `LINK_CONTRACT_VEHICLE`, `LINK_CONTRACT_DEALER`, `LINK_CONTRACT_PAYMENT` |
-| Satellites | customer details/credit, dealer details, vehicle details, application details/decision, contract terms/status, payment |
+| Hubs (5) | `HUB_CUSTOMER`, `HUB_DEALER`, `HUB_VEHICLE`, `HUB_APPLICATION`, `HUB_CONTRACT` |
+| Links (6) | `LINK_APPLICATION_CUSTOMER`, `LINK_APPLICATION_DEALER`, `LINK_CONTRACT_CUSTOMER`, `LINK_CONTRACT_VEHICLE`, `LINK_CONTRACT_DEALER`, `LINK_CONTRACT_PAYMENT` |
+| Satellites (9) | `SAT_CUSTOMER_ORIGINATION`, `SAT_CUSTOMER_SERVICING`, `SAT_DEALER_DETAILS`, `SAT_VEHICLE_DETAILS`, `SAT_APPLICATION_DETAILS`, `SAT_APPLICATION_DECISION`, `SAT_CONTRACT_TERMS`, `SAT_CONTRACT_STATUS`, `SAT_PAYMENT` |
+| Marts | `DIM_DATE`, `DIM_CUSTOMER`, `DIM_DEALER`, `DIM_VEHICLE`, `FACT_PAYMENT` |
 
-See `docs/data-model.md` for the full design and rationale.
+`SAT_CUSTOMER_ORIGINATION` / `SAT_CUSTOMER_SERVICING` show satellites split by
+**source system**; `SAT_CONTRACT_TERMS` / `SAT_CONTRACT_STATUS` show satellites
+split by **rate of change**.
+
+## How to run
+
+Built with the Snowflake CLI (`snow`). Run the SQL files in numbered order:
+
+```bash
+python3 data/generate_source_data.py                       # generate source CSVs
+snow sql -c <conn> -f sql/00_setup/01_warehouse_db_schemas.sql
+snow sql -c <conn> -f sql/01_staging/01_file_format_and_stage.sql
+snow stage copy "data/*.csv" "@AUTO_FINANCE_EDP.STAGING.EDP_STAGE" -c <conn>
+snow sql -c <conn> -f sql/01_staging/02_staging_tables.sql
+# ... continue through 01_staging, 02_raw_vault, 03_business_vault, 04_marts
+```
 
 ## Layout
 
 | Path | Layer |
 |---|---|
-| `data/` | Source files (Data Lake landing) |
-| `sql/00_setup/` | Database, schemas, warehouse, file formats |
-| `sql/01_staging/` | ODS — source-aligned staging |
-| `sql/02_raw_vault/` | Raw Vault — Hubs, Links, Satellites |
-| `sql/03_business_vault/` | Business Vault — PIT, Bridge, computed sats |
-| `sql/04_marts/` | Star Schema marts |
-| `docs/adr/` | Architecture decision records |
+| `data/` | Source CSV generator + files (Data Lake landing) |
+| `sql/00_setup/` | Warehouse, database, layer schemas |
+| `sql/01_staging/` | Staging / ODS — file format, stage, COPY INTO |
+| `sql/02_raw_vault/` | Raw Vault — Hubs, Links, Satellites + loaders |
+| `sql/03_business_vault/` | Business Vault — PIT table |
+| `sql/04_marts/` | Star Schema marts — dimensions, fact, analytics |
+
+## Tech
+
+Snowflake · SQL · Data Vault 2.0 · Star Schema · Python (synthetic data)

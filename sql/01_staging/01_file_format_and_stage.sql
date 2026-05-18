@@ -1,23 +1,30 @@
--- SETTING THE WORKING CONTEXT SO OBJECTS LAND IN THE RIGHT PLACE
-
+-- ============================================================
+-- 01_staging / 01 -- File format + internal stage
+--
+-- Before I can load a single CSV, I need two reusable objects:
+--   1. a FILE FORMAT -- tells Snowflake HOW to read a CSV
+--   2. a STAGE       -- a spot inside Snowflake to drop the files
+-- ============================================================
 USE WAREHOUSE EDP_WH;
-USE DATABASE TFS_EDP;
-USE SCHEMA STAGING;
+USE DATABASE  AUTO_FINANCE_EDP;
+USE SCHEMA    STAGING;
 
--- FILE FORMAT FOR THE CSV FILES WE'LL BE LOADING INTO THE STAGING LAYER
-
+-- The file format. I write the CSV parsing rules ONCE here, as a named
+-- object, instead of repeating them on every COPY command later.
 CREATE OR REPLACE FILE FORMAT CSV_FF
     TYPE = 'CSV'
-    FIELD_DELIMITER = ','
-    SKIP_HEADER = 1
-    FIELD_OPTIONALLY_ENCLOSED_BY = '"'
-    NULL_IF = ('NULL', 'null', '')
-    EMPTY_FIELD_AS_NULL = TRUE
-    TRIM_SPACE = TRUE
-    COMMENT = 'CSV format for EDP source data files';
+    FIELD_DELIMITER = ','                  -- columns are separated by commas
+    SKIP_HEADER = 1                        -- row 1 is column names -- skip it, it's not data
+    FIELD_OPTIONALLY_ENCLOSED_BY = '"'     -- a value containing a comma is wrapped in quotes
+    NULL_IF = ('NULL', 'null', '')         -- treat these literal strings as NULL
+    EMPTY_FIELD_AS_NULL = TRUE             -- an empty cell becomes NULL, not an empty string
+    TRIM_SPACE = TRUE                      -- strip stray spaces around values
+    COMMENT = 'CSV parsing rules for source data files';
 
--- INTERNAL NAMED STAGE: LANDING ZONE INSIDE SNOWFLAKE FOR OUR FILES
-
+-- The stage. This is the landing zone INSIDE Snowflake -- I upload my
+-- local CSVs here first, then COPY from here into tables. In a real
+-- platform this would be an EXTERNAL stage pointing at an S3 bucket;
+-- the rest of the pipeline wouldn't change.
 CREATE STAGE IF NOT EXISTS EDP_STAGE
     FILE_FORMAT = CSV_FF
-    COMMENT = 'Internal stage for landing source data files for EDP';
+    COMMENT = 'Internal stage -- landing zone for source CSV files';

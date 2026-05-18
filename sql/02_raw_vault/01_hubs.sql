@@ -1,8 +1,26 @@
 -- ============================================================
--- 02_raw_vault / 01 -- Hubs (unique business keys)
+-- 02_raw_vault / 01 -- Hubs
+--
+-- A Hub is the simplest Data Vault table. It's just a unique list
+-- of the business keys for one concept -- one row per customer,
+-- per dealer, etc. Nothing descriptive lives here.
+--
+-- Every Hub has the same 4 columns:
+--   <entity>_hk   -- the hash key = MD5(business key). My primary key.
+--   <business key>-- the natural key from the source system
+--   load_dts      -- when this key first showed up in the vault
+--   record_source -- which source system first sent it
+--
+-- WHY a hash key instead of an auto-number? It's deterministic --
+-- the same customer_id always hashes to the same value. So I can
+-- build hubs, links and satellites in parallel without waiting on
+-- a central key-lookup. That's the whole point of Data Vault 2.0.
+--
+-- Note: the MD5() isn't here -- this file only defines the empty
+-- shape. The hashing happens in the loader (02_load_hubs.sql).
 -- ============================================================
 USE WAREHOUSE EDP_WH;
-USE DATABASE  TFS_EDP;
+USE DATABASE  AUTO_FINANCE_EDP;
 USE SCHEMA    RAW_VAULT;
 
 -- HUB_CUSTOMER -- business key: customer_id

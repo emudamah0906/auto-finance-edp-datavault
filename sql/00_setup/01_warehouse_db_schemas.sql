@@ -1,38 +1,46 @@
--- =============================================================================
--- 00_setup / 01 -- Warehouse, database, and layer schemas
--- Run:  snow sql -c edp -f sql/00_setup/01_warehouse_db_schemas.sql
--- =============================================================================
+-- ============================================================
+-- 00_setup / 01 -- Warehouse, database and the layer schemas
+--
+-- This is the first script I run. Before touching any data I need
+-- somewhere to store it (a database + schemas) and something to
+-- process it (a warehouse).
+--   Run me:  snow sql -c edp -f sql/00_setup/01_warehouse_db_schemas.sql
+-- ============================================================
 
--- 1. Dedicated warehouse for EDP workloads -----------------------------------
---    A separate warehouse (not the shared COMPUTE_WH) isolates this project's
---    compute so its cost and performance are attributable on their own.
+-- STEP 1 -- a warehouse just for this project.
+-- In Snowflake a "warehouse" is the compute engine: it runs the queries
+-- and it's billed per second it's awake. I create a dedicated one instead
+-- of reusing the shared COMPUTE_WH so this project's cost stands on its
+-- own, and a heavy query here can't slow down anyone else.
 CREATE WAREHOUSE IF NOT EXISTS EDP_WH
-    WAREHOUSE_SIZE      = 'XSMALL'   -- smallest = cheapest; plenty for this data volume
-    AUTO_SUSPEND       = 60          -- park the warehouse after 60s idle (credit control)
-    AUTO_RESUME        = TRUE        -- wake automatically on the next query
-    INITIALLY_SUSPENDED = TRUE       -- don't burn credits the moment it's created
-    COMMENT = 'Compute for the TFS auto-finance Enterprise Data Platform';
+    WAREHOUSE_SIZE      = 'XSMALL'    -- smallest size -- my data is small, no reason to pay more
+    AUTO_SUSPEND        = 60          -- idle for 60s? switch it off so I stop being billed
+    AUTO_RESUME         = TRUE        -- switch back on automatically on the next query
+    INITIALLY_SUSPENDED = TRUE        -- don't start it (and bill me) the second it's created
+    COMMENT = 'Compute for the auto-finance Enterprise Data Platform';
 
--- 2. The EDP database ---------------------------------------------------------
-CREATE DATABASE IF NOT EXISTS TFS_EDP
+-- STEP 2 -- the database. This is just the container that will hold
+-- every table in the project.
+CREATE DATABASE IF NOT EXISTS AUTO_FINANCE_EDP
     COMMENT = 'Auto-finance Enterprise Data Platform (Data Vault 2.0)';
 
-USE DATABASE TFS_EDP;
+USE DATABASE AUTO_FINANCE_EDP;
 
--- 3. One schema per pipeline layer -------------------------------------------
---    Schemas, not databases, per layer: same DB keeps cross-layer joins cheap
---    and permissions simple, while schemas still give a clean security boundary.
-CREATE SCHEMA IF NOT EXISTS STAGING
+-- STEP 3 -- one schema per layer of the pipeline.
+-- My data flows through 4 stages, so each stage gets its own schema. I use
+-- schemas (not separate databases) because they keep cross-layer joins
+-- simple while still drawing a clean line between raw and finished data.
+CREATE SCHEMA IF NOT EXISTS STAGING          -- raw files land here, copied 1:1 from source
     COMMENT = 'ODS -- source-aligned landing tables, 1:1 with source extracts';
 
-CREATE SCHEMA IF NOT EXISTS RAW_VAULT
+CREATE SCHEMA IF NOT EXISTS RAW_VAULT        -- the Data Vault itself: hubs, links, satellites
     COMMENT = 'Raw Vault -- Hubs, Links, Satellites loaded as-is, no business rules';
 
-CREATE SCHEMA IF NOT EXISTS BUSINESS_VAULT
+CREATE SCHEMA IF NOT EXISTS BUSINESS_VAULT   -- helper tables that make the vault fast to query
     COMMENT = 'Business Vault -- computed satellites, PIT and Bridge tables';
 
-CREATE SCHEMA IF NOT EXISTS MARTS
+CREATE SCHEMA IF NOT EXISTS MARTS            -- the star schema the BI tools actually read
     COMMENT = 'Star Schema marts -- dimensions and facts for BI consumption';
 
--- 4. Show what we built -------------------------------------------------------
-SHOW SCHEMAS IN DATABASE TFS_EDP;
+-- Quick check -- list what I just created.
+SHOW SCHEMAS IN DATABASE AUTO_FINANCE_EDP;

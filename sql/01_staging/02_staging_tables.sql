@@ -1,12 +1,20 @@
 -- ============================================================
 -- 01_staging / 02 -- Staging (ODS) tables, one per source CSV
--- 1:1 mirror of source. No business logic. + 2 metadata columns.
+--
+-- The rule for this layer: each table is a 1:1 MIRROR of its source
+-- file. Same columns, same order, no renaming, no business logic.
+-- I want the data inside Snowflake exactly as the source sent it
+-- before I start reshaping it -- that gives me a clean checkpoint.
+--
+-- The only thing I add is 2 technical columns on every table:
+--   _SOURCE_FILE -- which file the row came from   (lineage)
+--   _LOAD_TS     -- when I loaded it               (audit)
 -- ============================================================
 USE WAREHOUSE EDP_WH;
-USE DATABASE TFS_EDP;
-USE SCHEMA STAGING; 
+USE DATABASE  AUTO_FINANCE_EDP;
+USE SCHEMA    STAGING;
 
------ DEALER source table------
+-- ---- DEALER source ----
 CREATE OR REPLACE TABLE STG_DEALER_DEALERS (
     dealer_code   STRING,
     dealer_name   STRING,

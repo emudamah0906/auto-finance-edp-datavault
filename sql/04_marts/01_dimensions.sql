@@ -1,14 +1,26 @@
 -- ============================================================
 -- 04_marts / 01 -- Star Schema dimensions
--- Built by collapsing Hub + latest Satellite from the Raw Vault.
+--
+-- The Raw Vault is built for LOADING. The marts are built for
+-- READING -- denormalized, few joins, what the BI tools query.
+--
+-- A dimension = one flat table describing a business entity. I
+-- build each one by collapsing a Hub + its LATEST satellite version
+-- into a single wide row, and giving it an integer surrogate key
+-- (IDENTITY auto-increment) -- the textbook star-schema key.
+--
+-- The trick to "latest version":
+--   QUALIFY ROW_NUMBER() OVER (PARTITION BY hk ORDER BY load_dts DESC) = 1
+-- The satellite keeps every version; the dimension wants only today's.
 -- ============================================================
 USE WAREHOUSE EDP_WH;
-USE DATABASE  TFS_EDP;
+USE DATABASE  AUTO_FINANCE_EDP;
 USE SCHEMA    MARTS;
 
--- ---- DIM_DATE -- generated calendar dimension ----
+-- ---- DIM_DATE -- a generated calendar. Not from the vault -- I just
+-- build a row per day so facts can join to it on a date_key.
 CREATE OR REPLACE TABLE DIM_DATE (
-    date_key     NUMBER       NOT NULL,   -- YYYYMMDD
+    date_key     NUMBER       NOT NULL,   -- YYYYMMDD as a number
     full_date    DATE         NOT NULL,
     year         NUMBER,
     quarter      NUMBER,
@@ -19,20 +31,24 @@ CREATE OR REPLACE TABLE DIM_DATE (
     CONSTRAINT pk_dim_date PRIMARY KEY (date_key)
 );
 
+-- GENERATOR makes N empty rows; SEQ4() numbers them 0,1,2... so
+-- DATEADD turns each into a calendar date.
 INSERT INTO DIM_DATE
 SELECT TO_NUMBER(TO_CHAR(d,'YYYYMMDD')), d,
        YEAR(d), QUARTER(d), MONTH(d), MONTHNAME(d), DAY(d), DAYNAME(d)
 FROM (
     SELECT DATEADD(day, SEQ4(), '2022-01-01'::DATE) AS d
-    FROM TABLE(GENERATOR(ROWCOUNT => 3653))     -- ~10 years
+    FROM TABLE(GENERATOR(ROWCOUNT => 3653))     -- ~10 years of days
 )
 WHERE d <= '2031-12-31';
 
--- ---- DIM_CUSTOMER -- HUB_CUSTOMER + latest SAT_CUSTOMER_ORIGINATION ----
+-- ---- DIM_CUSTOMER -- HUB_CUSTOMER + latest SAT_CUSTOMER_ORIGINATION.
+-- I keep customer_hk so I can always trace a dimension row back to
+-- the vault (lineage).
 CREATE OR REPLACE TABLE DIM_CUSTOMER (
-    customer_key  NUMBER IDENTITY(1,1) NOT NULL,   -- surrogate key
+    customer_key  NUMBER IDENTITY(1,1) NOT NULL,   -- surrogate key, auto-generated
     customer_hk   VARCHAR(32),                     -- lineage back to the vault
-    customer_id   STRING,                          -- natural key
+    customer_id   STRING,                          -- natural/business key
     first_name    STRING,
     last_name     STRING,
     date_of_birth DATE,
@@ -94,7 +110,7 @@ FROM RAW_VAULT.HUB_VEHICLE h
 JOIN RAW_VAULT.SAT_VEHICLE_DETAILS s ON s.vehicle_hk = h.vehicle_hk
 QUALIFY ROW_NUMBER() OVER (PARTITION BY h.vehicle_hk ORDER BY s.load_dts DESC) = 1;
 
--- Verify
+-- Check the row counts.
 SELECT 'DIM_DATE' AS dim, COUNT(*) AS n FROM DIM_DATE
 UNION ALL SELECT 'DIM_CUSTOMER', COUNT(*) FROM DIM_CUSTOMER
 UNION ALL SELECT 'DIM_DEALER',   COUNT(*) FROM DIM_DEALER

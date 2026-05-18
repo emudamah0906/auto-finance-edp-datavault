@@ -1,11 +1,37 @@
 -- ============================================================
--- 02_raw_vault / 05 -- Satellites (descriptive context + history)
+-- 02_raw_vault / 05 -- Satellites
+--
+-- A Satellite holds the DESCRIPTIVE data -- names, amounts, status --
+-- AND its history over time. The Hub says "customer C2 exists";
+-- the Satellite says "here's their name/email, and what it was
+-- last month too".
+--
+-- Standard satellite columns:
+--   <parent>_hk   -- the Hub (or Link) this row describes
+--   load_dts      -- when this VERSION loaded -- part of the PK
+--   hash_diff     -- MD5 of all the descriptive columns; the loader
+--                    uses it to detect change
+--   record_source
+--   ...the actual attributes...
+--
+-- PK = (parent_hk, load_dts) because a satellite keeps EVERY
+-- version -- a new row per change, never an update.
+--
+-- This file shows both satellite-splitting rules:
+--   * SPLIT BY SOURCE  -> SAT_CUSTOMER_ORIGINATION vs _SERVICING
+--                         (two systems describe the customer)
+--   * SPLIT BY RATE OF CHANGE -> SAT_CONTRACT_TERMS (static) vs
+--                         SAT_CONTRACT_STATUS (changes monthly)
+--
+-- Two satellites are special:
+--   SAT_CONTRACT_STATUS -- snapshot sat; status_date is in the PK
+--   SAT_PAYMENT         -- non-historized; a payment never changes
 -- ============================================================
 USE WAREHOUSE EDP_WH;
-USE DATABASE  TFS_EDP;
+USE DATABASE  AUTO_FINANCE_EDP;
 USE SCHEMA    RAW_VAULT;
 
--- SAT_CUSTOMER_ORIGINATION -- off HUB_CUSTOMER, source: origination
+-- SAT_CUSTOMER_ORIGINATION -- customer as the origination system sees them
 CREATE OR REPLACE TABLE SAT_CUSTOMER_ORIGINATION (
     customer_hk    VARCHAR(32)   NOT NULL,
     load_dts       TIMESTAMP_NTZ NOT NULL,
@@ -25,7 +51,7 @@ CREATE OR REPLACE TABLE SAT_CUSTOMER_ORIGINATION (
     CONSTRAINT pk_sat_customer_origination PRIMARY KEY (customer_hk, load_dts)
 );
 
--- SAT_CUSTOMER_SERVICING -- off HUB_CUSTOMER, source: servicing
+-- SAT_CUSTOMER_SERVICING -- same customer, as the servicing system sees them
 CREATE OR REPLACE TABLE SAT_CUSTOMER_SERVICING (
     customer_hk         VARCHAR(32)   NOT NULL,
     load_dts            TIMESTAMP_NTZ NOT NULL,
@@ -42,7 +68,7 @@ CREATE OR REPLACE TABLE SAT_CUSTOMER_SERVICING (
     CONSTRAINT pk_sat_customer_servicing PRIMARY KEY (customer_hk, load_dts)
 );
 
--- SAT_DEALER_DETAILS -- off HUB_DEALER
+-- SAT_DEALER_DETAILS
 CREATE OR REPLACE TABLE SAT_DEALER_DETAILS (
     dealer_hk     VARCHAR(32)   NOT NULL,
     load_dts      TIMESTAMP_NTZ NOT NULL,
@@ -56,7 +82,7 @@ CREATE OR REPLACE TABLE SAT_DEALER_DETAILS (
     CONSTRAINT pk_sat_dealer_details PRIMARY KEY (dealer_hk, load_dts)
 );
 
--- SAT_VEHICLE_DETAILS -- off HUB_VEHICLE
+-- SAT_VEHICLE_DETAILS
 CREATE OR REPLACE TABLE SAT_VEHICLE_DETAILS (
     vehicle_hk    VARCHAR(32)   NOT NULL,
     load_dts      TIMESTAMP_NTZ NOT NULL,
@@ -70,7 +96,7 @@ CREATE OR REPLACE TABLE SAT_VEHICLE_DETAILS (
     CONSTRAINT pk_sat_vehicle_details PRIMARY KEY (vehicle_hk, load_dts)
 );
 
--- SAT_APPLICATION_DETAILS -- off HUB_APPLICATION (the request side)
+-- SAT_APPLICATION_DETAILS -- the request side of an application
 CREATE OR REPLACE TABLE SAT_APPLICATION_DETAILS (
     application_hk   VARCHAR(32)   NOT NULL,
     load_dts         TIMESTAMP_NTZ NOT NULL,
@@ -83,7 +109,7 @@ CREATE OR REPLACE TABLE SAT_APPLICATION_DETAILS (
     CONSTRAINT pk_sat_application_details PRIMARY KEY (application_hk, load_dts)
 );
 
--- SAT_APPLICATION_DECISION -- off HUB_APPLICATION (the decision side)
+-- SAT_APPLICATION_DECISION -- the decision side (split by rate of change)
 CREATE OR REPLACE TABLE SAT_APPLICATION_DECISION (
     application_hk  VARCHAR(32)   NOT NULL,
     load_dts        TIMESTAMP_NTZ NOT NULL,
@@ -95,7 +121,7 @@ CREATE OR REPLACE TABLE SAT_APPLICATION_DECISION (
     CONSTRAINT pk_sat_application_decision PRIMARY KEY (application_hk, load_dts)
 );
 
--- SAT_CONTRACT_TERMS -- off HUB_CONTRACT (static, set at booking)
+-- SAT_CONTRACT_TERMS -- set once at booking, rarely changes
 CREATE OR REPLACE TABLE SAT_CONTRACT_TERMS (
     contract_hk     VARCHAR(32)   NOT NULL,
     load_dts        TIMESTAMP_NTZ NOT NULL,
@@ -111,7 +137,8 @@ CREATE OR REPLACE TABLE SAT_CONTRACT_TERMS (
     CONSTRAINT pk_sat_contract_terms PRIMARY KEY (contract_hk, load_dts)
 );
 
--- SAT_CONTRACT_STATUS -- SNAPSHOT satellite: status_date is part of the PK
+-- SAT_CONTRACT_STATUS -- snapshot sat: the source is a monthly time
+-- series, so status_date belongs in the primary key.
 CREATE OR REPLACE TABLE SAT_CONTRACT_STATUS (
     contract_hk         VARCHAR(32)   NOT NULL,
     status_date         DATE          NOT NULL,
@@ -124,7 +151,9 @@ CREATE OR REPLACE TABLE SAT_CONTRACT_STATUS (
     CONSTRAINT pk_sat_contract_status PRIMARY KEY (contract_hk, status_date)
 );
 
--- SAT_PAYMENT -- NON-HISTORIZED satellite off the transactional link
+-- SAT_PAYMENT -- non-historized sat off the transactional link.
+-- A payment is immutable, so there's no history to track -- PK is
+-- just the link key.
 CREATE OR REPLACE TABLE SAT_PAYMENT (
     contract_payment_hk VARCHAR(32)   NOT NULL,
     load_dts            TIMESTAMP_NTZ NOT NULL,

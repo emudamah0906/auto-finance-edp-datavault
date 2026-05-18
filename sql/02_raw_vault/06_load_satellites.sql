@@ -1,16 +1,36 @@
 -- ============================================================
--- 02_raw_vault / 06 -- Satellite loaders (HASH_DIFF change detection)
+-- 02_raw_vault / 06 -- Satellite loaders (the HASH_DIFF logic)
+--
+-- This is the most important loader in the whole vault.
+--
+-- THE PROBLEM: a satellite keeps history. On every run I must ask
+-- "is this incoming row actually DIFFERENT from what I already have?"
+--
+-- THE TRICK: hash_diff = MD5 of all the descriptive columns.
+--   * compute the incoming row's hash_diff
+--   * compare it to the CURRENT (latest) row's hash_diff for that key
+--   * different (or no row yet) -> INSERT a new version
+--   * same -> do nothing
+-- One comparison instead of checking every column by hand.
+--
+-- Pattern for a standard satellite (the CTE form below):
+--   src = incoming rows with their hash_diff computed
+--   cur = the current version of each parent (latest load_dts)
+--   insert where cur is missing OR the hash_diff changed
+--
+-- Note: I wrap every column in COALESCE(TO_VARCHAR(col),'') before
+-- hashing -- otherwise a single NULL would make the whole hash NULL.
 -- ============================================================
 USE WAREHOUSE EDP_WH;
-USE DATABASE  TFS_EDP;
+USE DATABASE  AUTO_FINANCE_EDP;
 USE SCHEMA    RAW_VAULT;
 
--- ---- SAT_CUSTOMER_ORIGINATION (standard) ----
+-- ---- SAT_CUSTOMER_ORIGINATION (standard satellite) ----
 INSERT INTO SAT_CUSTOMER_ORIGINATION
        (customer_hk, load_dts, hash_diff, record_source,
         first_name, last_name, date_of_birth, email, phone,
         street_address, city, province, postal_code, credit_score, risk_band)
-WITH src AS (
+WITH src AS (   -- incoming rows + their hash_diff
     SELECT MD5(customer_id) AS customer_hk,
            MD5(COALESCE(TO_VARCHAR(first_name),'')||'|'||COALESCE(TO_VARCHAR(last_name),'')||'|'||
                COALESCE(TO_VARCHAR(date_of_birth),'')||'|'||COALESCE(TO_VARCHAR(email),'')||'|'||
@@ -22,7 +42,7 @@ WITH src AS (
            street_address, city, province, postal_code, credit_score, risk_band
     FROM STAGING.STG_ORIGINATION_CUSTOMERS
 ),
-cur AS (
+cur AS (        -- the current version already stored, per customer
     SELECT customer_hk, hash_diff FROM SAT_CUSTOMER_ORIGINATION
     QUALIFY ROW_NUMBER() OVER (PARTITION BY customer_hk ORDER BY load_dts DESC) = 1
 )
@@ -30,9 +50,10 @@ SELECT src.customer_hk, CURRENT_TIMESTAMP(), src.hash_diff, 'ORIGINATION',
        src.first_name, src.last_name, src.date_of_birth, src.email, src.phone,
        src.street_address, src.city, src.province, src.postal_code, src.credit_score, src.risk_band
 FROM src LEFT JOIN cur ON src.customer_hk = cur.customer_hk
-WHERE cur.customer_hk IS NULL OR cur.hash_diff <> src.hash_diff;
+WHERE cur.customer_hk IS NULL              -- brand new customer
+   OR cur.hash_diff <> src.hash_diff;      -- or something changed
 
--- ---- SAT_CUSTOMER_SERVICING (standard) ----
+-- ---- SAT_CUSTOMER_SERVICING (standard satellite) ----
 INSERT INTO SAT_CUSTOMER_SERVICING
        (customer_hk, load_dts, hash_diff, record_source,
         first_name, last_name, email, phone,
@@ -57,7 +78,7 @@ SELECT src.customer_hk, CURRENT_TIMESTAMP(), src.hash_diff, 'SERVICING',
 FROM src LEFT JOIN cur ON src.customer_hk = cur.customer_hk
 WHERE cur.customer_hk IS NULL OR cur.hash_diff <> src.hash_diff;
 
--- ---- SAT_DEALER_DETAILS (standard) ----
+-- ---- SAT_DEALER_DETAILS (standard satellite) ----
 INSERT INTO SAT_DEALER_DETAILS
        (dealer_hk, load_dts, hash_diff, record_source,
         dealer_name, region, city, province, dealer_status)
@@ -78,7 +99,7 @@ SELECT src.dealer_hk, CURRENT_TIMESTAMP(), src.hash_diff, 'DEALER',
 FROM src LEFT JOIN cur ON src.dealer_hk = cur.dealer_hk
 WHERE cur.dealer_hk IS NULL OR cur.hash_diff <> src.hash_diff;
 
--- ---- SAT_VEHICLE_DETAILS (standard) ----
+-- ---- SAT_VEHICLE_DETAILS (standard satellite) ----
 INSERT INTO SAT_VEHICLE_DETAILS
        (vehicle_hk, load_dts, hash_diff, record_source,
         make, model, model_year, trim, msrp)
@@ -99,7 +120,7 @@ SELECT src.vehicle_hk, CURRENT_TIMESTAMP(), src.hash_diff, 'DEALER',
 FROM src LEFT JOIN cur ON src.vehicle_hk = cur.vehicle_hk
 WHERE cur.vehicle_hk IS NULL OR cur.hash_diff <> src.hash_diff;
 
--- ---- SAT_APPLICATION_DETAILS (standard) ----
+-- ---- SAT_APPLICATION_DETAILS (standard satellite) ----
 INSERT INTO SAT_APPLICATION_DETAILS
        (application_hk, load_dts, hash_diff, record_source,
         product_type, requested_amount, application_date, channel)
@@ -119,7 +140,7 @@ SELECT src.application_hk, CURRENT_TIMESTAMP(), src.hash_diff, 'ORIGINATION',
 FROM src LEFT JOIN cur ON src.application_hk = cur.application_hk
 WHERE cur.application_hk IS NULL OR cur.hash_diff <> src.hash_diff;
 
--- ---- SAT_APPLICATION_DECISION (standard) ----
+-- ---- SAT_APPLICATION_DECISION (standard satellite) ----
 INSERT INTO SAT_APPLICATION_DECISION
        (application_hk, load_dts, hash_diff, record_source,
         credit_decision, approved_amount, decision_date)
@@ -139,7 +160,7 @@ SELECT src.application_hk, CURRENT_TIMESTAMP(), src.hash_diff, 'ORIGINATION',
 FROM src LEFT JOIN cur ON src.application_hk = cur.application_hk
 WHERE cur.application_hk IS NULL OR cur.hash_diff <> src.hash_diff;
 
--- ---- SAT_CONTRACT_TERMS (standard) ----
+-- ---- SAT_CONTRACT_TERMS (standard satellite) ----
 INSERT INTO SAT_CONTRACT_TERMS
        (contract_hk, load_dts, hash_diff, record_source,
         contract_type, apr, term_months, amount_financed, residual_value, start_date, maturity_date)
@@ -162,7 +183,9 @@ SELECT src.contract_hk, CURRENT_TIMESTAMP(), src.hash_diff, 'SERVICING',
 FROM src LEFT JOIN cur ON src.contract_hk = cur.contract_hk
 WHERE cur.contract_hk IS NULL OR cur.hash_diff <> src.hash_diff;
 
--- ---- SAT_CONTRACT_STATUS (snapshot: insert any new contract_hk + status_date) ----
+-- ---- SAT_CONTRACT_STATUS (snapshot satellite) ----
+-- No hash_diff compare here -- every monthly status row is its own
+-- fact. I just insert any (contract_hk, status_date) not already in.
 INSERT INTO SAT_CONTRACT_STATUS
        (contract_hk, status_date, load_dts, hash_diff, record_source,
         contract_status, delinquency_bucket, outstanding_balance)
@@ -176,7 +199,9 @@ WHERE NOT EXISTS (
     WHERE t.contract_hk = MD5(s.contract_number) AND t.status_date = s.status_date
 );
 
--- ---- SAT_PAYMENT (non-historized: insert any new payment key) ----
+-- ---- SAT_PAYMENT (non-historized satellite) ----
+-- A payment never changes, so no history logic -- just insert any
+-- payment key I haven't seen before.
 INSERT INTO SAT_PAYMENT
        (contract_payment_hk, load_dts, hash_diff, record_source,
         payment_date, payment_amount, payment_method)
@@ -187,7 +212,7 @@ SELECT MD5(s.payment_id), CURRENT_TIMESTAMP(),
 FROM STAGING.STG_SERVICING_PAYMENTS s
 WHERE MD5(s.payment_id) NOT IN (SELECT contract_payment_hk FROM SAT_PAYMENT);
 
--- Verify row counts
+-- Check the row counts after loading.
 SELECT 'SAT_CUSTOMER_ORIGINATION' AS sat, COUNT(*) AS n FROM SAT_CUSTOMER_ORIGINATION
 UNION ALL SELECT 'SAT_CUSTOMER_SERVICING',  COUNT(*) FROM SAT_CUSTOMER_SERVICING
 UNION ALL SELECT 'SAT_DEALER_DETAILS',      COUNT(*) FROM SAT_DEALER_DETAILS
