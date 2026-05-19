@@ -6,6 +6,8 @@ layered warehouse — Data Vault 2.0 for integration, Star Schema for consumptio
 
 ## Architecture
 
+![Architecture](docs/architecture.png)
+
 ```
 data/ (Data Lake)  ->  Staging / ODS  ->  Raw Vault  ->  Business Vault  ->  Star Schema Marts
   raw CSV files        source-aligned     Hubs/Links/    PIT tables          dims + fact

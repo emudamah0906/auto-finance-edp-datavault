@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 560" font-family="Helvetica, Arial, sans-serif">
+  <!-- background -->
+  <rect width="1240" height="560" fill="#0b1729"/>
+
+  <!-- title -->
+  <text x="620" y="56" text-anchor="middle" fill="#ffffff" font-size="32" font-weight="700">Auto-Finance Enterprise Data Platform</text>
+  <text x="620" y="88" text-anchor="middle" fill="#7c91b2" font-size="17">Data Vault 2.0 on Snowflake  —  source integration to BI-ready marts</text>
+
+  <!-- ===== layer cards ===== -->
+  <!-- defs: arrow marker -->
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#5468a8"/>
+    </marker>
+  </defs>
+
+  <!-- CARD 1 -->
+  <rect x="40" y="140" width="200" height="220" rx="12" fill="#15233f" stroke="#1f3358"/>
+  <rect x="40" y="140" width="200" height="6" rx="3" fill="#64748b"/>
+  <text x="140" y="174" text-anchor="middle" fill="#64748b" font-size="12" font-weight="700" letter-spacing="1">01 · SOURCE</text>
+  <text x="140" y="200" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">Data Lake</text>
+  <text x="140" y="238" text-anchor="middle" fill="#aebbd1" font-size="13">Origination</text>
+  <text x="140" y="262" text-anchor="middle" fill="#aebbd1" font-size="13">Servicing</text>
+  <text x="140" y="286" text-anchor="middle" fill="#aebbd1" font-size="13">Dealer</text>
+  <text x="140" y="324" text-anchor="middle" fill="#6b7c9c" font-size="12">8 CSV extracts</text>
+
+  <!-- CARD 2 -->
+  <rect x="300" y="140" width="200" height="220" rx="12" fill="#15233f" stroke="#1f3358"/>
+  <rect x="300" y="140" width="200" height="6" rx="3" fill="#0ea5e9"/>
+  <text x="400" y="174" text-anchor="middle" fill="#0ea5e9" font-size="12" font-weight="700" letter-spacing="1">02 · STAGING</text>
+  <text x="400" y="200" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">ODS Layer</text>
+  <text x="400" y="238" text-anchor="middle" fill="#aebbd1" font-size="13">8 staging tables</text>
+  <text x="400" y="262" text-anchor="middle" fill="#aebbd1" font-size="13">1:1 source mirror</text>
+  <text x="400" y="286" text-anchor="middle" fill="#aebbd1" font-size="13">+ lineage columns</text>
+  <text x="400" y="324" text-anchor="middle" fill="#6b7c9c" font-size="12">COPY INTO</text>
+
+  <!-- CARD 3 -->
+  <rect x="560" y="140" width="200" height="220" rx="12" fill="#1a2547" stroke="#3b4a86"/>
+  <rect x="560" y="140" width="200" height="6" rx="3" fill="#6366f1"/>
+  <text x="660" y="174" text-anchor="middle" fill="#8b93f5" font-size="12" font-weight="700" letter-spacing="1">03 · RAW VAULT</text>
+  <text x="660" y="200" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">Data Vault 2.0</text>
+  <text x="660" y="238" text-anchor="middle" fill="#c7cdf7" font-size="13">5 Hubs</text>
+  <text x="660" y="262" text-anchor="middle" fill="#c7cdf7" font-size="13">6 Links</text>
+  <text x="660" y="286" text-anchor="middle" fill="#c7cdf7" font-size="13">9 Satellites</text>
+  <text x="660" y="324" text-anchor="middle" fill="#6b7c9c" font-size="12">hash-keyed · insert-only</text>
+
+  <!-- CARD 4 -->
+  <rect x="820" y="140" width="200" height="220" rx="12" fill="#15233f" stroke="#1f3358"/>
+  <rect x="820" y="140" width="200" height="6" rx="3" fill="#a855f7"/>
+  <text x="920" y="174" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="700" letter-spacing="1">04 · BUSINESS</text>
+  <text x="920" y="200" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">Business Vault</text>
+  <text x="920" y="238" text-anchor="middle" fill="#aebbd1" font-size="13">Point-In-Time</text>
+  <text x="920" y="262" text-anchor="middle" fill="#aebbd1" font-size="13">table</text>
+  <text x="920" y="286" text-anchor="middle" fill="#aebbd1" font-size="13">query accelerator</text>
+  <text x="920" y="324" text-anchor="middle" fill="#6b7c9c" font-size="12">rebuildable</text>
+
+  <!-- CARD 5 -->
+  <rect x="1080" y="140" width="200" height="220" rx="12" fill="#15233f" stroke="#1f3358"/>
+  <rect x="1080" y="140" width="200" height="6" rx="3" fill="#f59e0b"/>
+  <text x="1180" y="174" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700" letter-spacing="1">05 · MARTS</text>
+  <text x="1180" y="200" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">Star Schema</text>
+  <text x="1180" y="238" text-anchor="middle" fill="#aebbd1" font-size="13">4 Dimensions</text>
+  <text x="1180" y="262" text-anchor="middle" fill="#aebbd1" font-size="13">1 Fact table</text>
+  <text x="1180" y="286" text-anchor="middle" fill="#aebbd1" font-size="13">BI-ready</text>
+  <text x="1180" y="324" text-anchor="middle" fill="#6b7c9c" font-size="12">analysts query here</text>
+
+  <!-- arrows between cards -->
+  <line x1="248" y1="250" x2="292" y2="250" stroke="#5468a8" stroke-width="2.5" marker-end="url(#arr)"/>
+  <line x1="508" y1="250" x2="552" y2="250" stroke="#5468a8" stroke-width="2.5" marker-end="url(#arr)"/>
+  <line x1="768" y1="250" x2="812" y2="250" stroke="#5468a8" stroke-width="2.5" marker-end="url(#arr)"/>
+  <line x1="1028" y1="250" x2="1072" y2="250" stroke="#5468a8" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- principles band -->
+  <rect x="40" y="404" width="1160" height="48" rx="10" fill="#11203c" stroke="#1f3358"/>
+  <text x="620" y="434" text-anchor="middle" fill="#9fb0cc" font-size="14" letter-spacing="0.5">
+    Insert-only    ·    Hash-keyed for parallel loads    ·    Idempotent (safe re-runs)    ·    End-to-end data lineage
+  </text>
+
+  <!-- footer tech -->
+  <text x="620" y="500" text-anchor="middle" fill="#5d6f90" font-size="13" letter-spacing="1.5">
+    SNOWFLAKE  ·  SQL  ·  DATA VAULT 2.0  ·  STAR SCHEMA  ·  PYTHON
+  </text>
+</svg>
